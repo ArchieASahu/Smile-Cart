@@ -1,7 +1,10 @@
 import React from "react";
 
-import { Button } from "neetoui";
+import Product from "components/Product";
 
-const App = () => <Button label="Click me" style="secondary" />;
+// import { Button } from "neetoui";
 
+const App = () => <Product />;
+
+//const App = () => <tempo />
 export default App;
