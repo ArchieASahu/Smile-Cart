@@ -8,12 +8,19 @@ import Carousel from "./Carousel";
 
 const Product = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState({
+    name: "",
+    description: "",
+    mrp: 0,
+    offerPrice: 0,
+    imageUrls: [],
+    imageUrl: "",
+  });
 
   const fetchProduct = async () => {
     try {
-      const response = await productsApi.show();
-      setProduct(response.data);
+      const fetchedProduct = await productsApi.show();
+      setProduct(fetchedProduct);
     } catch (error) {
       console.log("An error occurred:", error);
     } finally {
@@ -25,19 +32,7 @@ const Product = () => {
     fetchProduct();
   }, []);
 
-  // Destructuring product
-  const {
-    name,
-    description,
-    mrp,
-    offer_price: offerPrice,
-    image_urls: imageUrls,
-    image_url: imageUrl,
-  } = product;
-
-  // Calculating discount percentage
-  const discountPercentage = (((mrp - offerPrice) / mrp) * 100).toFixed(1);
-
+  // Conditional rendering to handle initial state
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -45,6 +40,20 @@ const Product = () => {
       </div>
     );
   }
+
+  // Avoid destructuring if product is empty
+  const {
+    name = "",
+    description = "",
+    mrp = 0,
+    offerPrice = 0,
+    imageUrls = [],
+    imageUrl = "",
+  } = product;
+
+  const discountPercentage = mrp
+    ? (((mrp - offerPrice) / mrp) * 100).toFixed(1)
+    : 0;
 
   return (
     <div className="px-6 pb-6">
